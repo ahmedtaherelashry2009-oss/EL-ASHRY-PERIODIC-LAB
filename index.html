@@ -1,0 +1,4081 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>EL-ASHRY PERIODIC LAB</title>
+
+<style>
+:root{
+ --bg:#0b1220;--panel:#121e30;--panel2:#192940;--text:#edf4ff;
+ --muted:#9aabc2;--line:#2b3d56;--accent:#45d6a0;--accent2:#65a9ff;
+ --shadow:0 12px 35px #0004
+}
+body.light{
+ --bg:#f1f5f9;--panel:#fff;--panel2:#e8eef5;--text:#172337;
+ --muted:#627187;--line:#d7e0ea;--accent:#087d59;--accent2:#1768bb;
+ --shadow:0 10px 28px #2332
+}
+
+*{box-sizing:border-box}
+
+html{
+ scroll-behavior:smooth;
+}
+
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Arial,Tahoma,sans-serif;
+ line-height:1.65;
+ overflow-x:hidden;
+}
+
+button,input,select{
+ font:inherit
+}
+
+button{
+ cursor:pointer
+}
+
+button,.btn{
+ background:var(--panel2);
+ border:1px solid var(--line);
+ color:var(--text);
+ padding:9px 13px;
+ border-radius:10px;
+}
+
+button:hover,.btn:hover{
+ border-color:var(--accent);
+ color:var(--accent)
+}
+
+.primary{
+ background:var(--accent);
+ color:#06251b;
+ border:0;
+ font-weight:bold
+}
+
+header{
+ position:sticky;
+ top:0;
+ z-index:10;
+ background:var(--panel);
+ border-bottom:1px solid var(--line);
+ padding:12px 4%;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ flex-wrap:wrap
+}
+
+.brand{
+ font-weight:900;
+ color:var(--accent);
+ font-size:20px;
+ letter-spacing:1px
+}
+
+.brand small{
+ display:block;
+ color:var(--muted);
+ font-size:10px;
+ letter-spacing:2px
+}
+
+nav{
+ display:flex;
+ gap:7px;
+ flex-wrap:wrap
+}
+
+main{
+ max-width:1500px;
+ margin:auto;
+ padding:22px 3% 60px
+}
+
+.page{
+ display:none
+}
+
+.page.active{
+ display:block
+}
+
+.hero{
+ background:linear-gradient(125deg,#123a39,#172d50 70%,#24204b);
+ border:1px solid #315a68;
+ border-radius:22px;
+ padding:32px;
+ margin-bottom:22px
+}
+
+.hero h1{
+ font-size:clamp(25px,4vw,44px);
+ margin:0;
+ color:#fff
+}
+
+.hero p{
+ color:#d6e8f3
+}
+
+h2,h3{
+ margin-top:12px
+}
+
+.muted{
+ color:var(--muted)
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:14px
+}
+
+.card{
+ background:var(--panel);
+ border:1px solid var(--line);
+ border-radius:16px;
+ padding:17px;
+ box-shadow:var(--shadow)
+}
+
+.stat{
+ font-size:27px;
+ font-weight:900;
+ color:var(--accent)
+}
+
+.toolbar{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+ margin:15px 0
+}
+
+input,select{
+ background:var(--panel);
+ color:var(--text);
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:11px;
+ min-width:0;
+ max-width:100%;
+}
+
+input:focus,select:focus{
+ outline:2px solid var(--accent)
+}
+
+.search{
+ flex:1;
+ min-width:200px
+}
+
+/* =========================
+   الجدول الدوري
+========================= */
+
+.table-wrap{
+ width:100%;
+ overflow-x:auto;
+ overflow-y:hidden;
+ padding:8px 2px 16px;
+ -webkit-overflow-scrolling:touch;
+ overscroll-behavior-x:contain;
+ scrollbar-width:thin;
+ direction:ltr;
+}
+
+.periodic{
+ display:grid;
+ direction:ltr;
+ grid-template-columns:repeat(18,minmax(54px,1fr));
+ gap:5px;
+ min-width:1060px;
+}
+
+.element{
+ position:relative;
+ min-height:79px;
+ border-radius:8px;
+ border:1px solid #ffffff30;
+ padding:4px;
+ text-align:center;
+ cursor:pointer;
+ color:#101827;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ transition:.15s;
+}
+
+.element:hover{
+ transform:translateY(-3px);
+ outline:2px solid white
+}
+
+.element .z{
+ font-size:10px;
+ align-self:flex-start
+}
+
+.element strong{
+ font-size:21px;
+ line-height:1.2
+}
+
+.element small{
+ font-size:9px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis
+}
+
+.element .mass{
+ font-size:9px
+}
+
+.spacer-cell{
+ visibility:hidden
+}
+
+.f-label{
+ grid-column:1/-1;
+ direction:rtl;
+ text-align:right;
+ color:var(--muted);
+ padding:12px 4px 3px
+}
+
+.alkali{background:#ffb36b}
+.alkaline{background:#ffe08b}
+.transition{background:#f3a1a1}
+.post{background:#b5c8f5}
+.metalloid{background:#7ed6c4}
+.nonmetal{background:#91d98b}
+.halogen{background:#b9a3ec}
+.noble{background:#85c9ed}
+.lanthanide{background:#e9b5d7}
+.actinide{background:#d8a6a6}
+.unknown{background:#b7bec8}
+
+.legend{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin:15px 0
+}
+
+.legend span{
+ border-radius:7px;
+ padding:4px 9px;
+ color:#14202d;
+ font-size:12px
+}
+
+.detail-head{
+ display:flex;
+ gap:18px;
+ align-items:center;
+ flex-wrap:wrap
+}
+
+.big-symbol{
+ font-size:65px;
+ font-weight:900;
+ background:var(--panel2);
+ border:1px solid var(--line);
+ border-radius:20px;
+ width:115px;
+ height:115px;
+ display:grid;
+ place-items:center;
+ color:var(--accent)
+}
+
+.tabs{
+ display:flex;
+ gap:7px;
+ flex-wrap:wrap;
+ margin:18px 0
+}
+
+.tab{
+ padding:8px 12px
+}
+
+.tab.active{
+ background:var(--accent);
+ color:#06251b
+}
+
+.info-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+ gap:10px
+}
+
+.info{
+ background:var(--panel2);
+ padding:12px;
+ border-radius:10px;
+ overflow-wrap:anywhere
+}
+
+.info b{
+ display:block;
+ color:var(--muted);
+ font-size:12px
+}
+
+.config{
+ direction:ltr;
+ text-align:left;
+ font-family:monospace;
+ font-size:19px;
+ overflow-wrap:anywhere;
+ color:var(--accent);
+ background:var(--panel2);
+ padding:15px;
+ border-radius:10px
+}
+
+.shells{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ direction:ltr
+}
+
+.shell{
+ background:var(--panel2);
+ border:1px solid var(--line);
+ padding:10px 14px;
+ border-radius:10px;
+ text-align:center
+}
+
+.shell strong{
+ display:block;
+ font-size:21px;
+ color:var(--accent)
+}
+
+footer{
+ text-align:center;
+ padding:25px;
+ color:var(--muted);
+ border-top:1px solid var(--line)
+}
+
+.hidden{
+ display:none!important
+}
+
+/* =========================
+   معمل الذرة
+========================= */
+
+.lab-layout{
+ display:grid;
+ grid-template-columns:minmax(260px,360px) minmax(300px,1fr);
+ gap:16px;
+ align-items:start
+}
+
+.lab-controls{
+ display:grid;
+ gap:13px
+}
+
+.control-group{
+ background:var(--panel2);
+ border:1px solid var(--line);
+ border-radius:12px;
+ padding:12px
+}
+
+.control-group label{
+ display:block;
+ font-weight:bold;
+ margin-bottom:7px
+}
+
+.control-group input,
+.control-group select{
+ width:100%
+}
+
+.control-row{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px
+}
+
+.element-selector{
+ display:grid;
+ gap:8px
+}
+
+.element-selector select{
+ width:100%;
+ cursor:pointer
+}
+
+.element-preview{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ background:var(--panel);
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:9px
+}
+
+.element-preview-symbol{
+ width:45px;
+ height:45px;
+ display:grid;
+ place-items:center;
+ border-radius:9px;
+ font-size:20px;
+ font-weight:900;
+ color:#101827
+}
+
+.element-preview-info{
+ min-width:0
+}
+
+.element-preview-info strong{
+ display:block
+}
+
+.element-preview-info small{
+ display:block;
+ color:var(--muted);
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis
+}
+
+.atom-stage{
+ background:radial-gradient(circle at center,#17344a 0%,#101d30 55%,#0b1220 100%);
+ border:1px solid #31516a;
+ border-radius:16px;
+ min-height:420px;
+ display:grid;
+ place-items:center;
+ overflow:hidden
+}
+
+.atom-stage svg{
+ width:100%;
+ max-width:540px;
+ height:auto
+}
+
+.atom-summary{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+ gap:9px;
+ margin-top:12px
+}
+
+.atom-stat{
+ background:var(--panel2);
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:10px;
+ text-align:center
+}
+
+.atom-stat strong{
+ display:block;
+ font-size:23px;
+ color:var(--accent)
+}
+
+.atom-stat span{
+ font-size:12px;
+ color:var(--muted)
+}
+
+.electron-dot{
+ fill:#62c6ff;
+ stroke:#d9f3ff;
+ stroke-width:1
+}
+
+.nucleus-proton{
+ fill:#ff7b7b
+}
+
+.nucleus-neutron{
+ fill:#b5c5d9
+}
+
+.atom-note{
+ font-size:12px;
+ color:var(--muted);
+ margin-top:12px
+}
+
+.charge-pill{
+ display:inline-block;
+ background:var(--panel2);
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:4px 12px;
+ color:var(--accent);
+ font-weight:bold
+}
+
+/* =========================
+   الحاسبات
+========================= */
+
+.result-box{
+ margin-top:12px;
+ background:var(--panel2);
+ border:1px solid var(--line);
+ padding:13px;
+ border-radius:12px;
+ overflow-wrap:anywhere
+}
+
+.result-big{
+ font-size:25px;
+ font-weight:900;
+ color:var(--accent);
+ direction:ltr;
+ text-align:center
+}
+
+.formula-input{
+ width:100%;
+ margin:6px 0 10px
+}
+
+.calc-card{
+ display:flex;
+ flex-direction:column;
+ gap:9px
+}
+
+.calc-card input,
+.calc-card select{
+ width:100%
+}
+
+.calc-card button{
+ align-self:flex-start
+}
+
+.calc-hint{
+ font-size:12px;
+ color:var(--muted)
+}
+
+.calc-result{
+ background:var(--panel2);
+ border-radius:11px;
+ padding:12px;
+ margin-top:5px;
+ min-height:55px;
+ overflow-wrap:anywhere
+}
+
+.calc-result table{
+ width:100%;
+ border-collapse:collapse;
+ direction:rtl
+}
+
+.calc-result td,
+.calc-result th{
+ padding:6px;
+ border-bottom:1px solid var(--line);
+ text-align:right
+}
+
+.calc-result .total{
+ font-weight:bold;
+ color:var(--accent)
+}
+
+.example-btn{
+ font-size:12px;
+ padding:5px 9px;
+ margin:3px
+}
+
+.element-picker{
+ display:grid;
+ grid-template-columns:1fr auto;
+ gap:8px;
+ align-items:end;
+ margin:5px 0 8px
+}
+
+.element-picker select{
+ width:100%
+}
+
+.element-picker button{
+ white-space:nowrap
+}
+
+.selected-element-box{
+ background:var(--panel2);
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:9px;
+ margin-bottom:7px;
+ display:none
+}
+
+.selected-element-box.show{
+ display:block
+}
+
+.selected-element-box strong{
+ color:var(--accent)
+}
+
+/* =========================
+   موبايل
+========================= */
+
+@media(max-width:850px){
+
+ .lab-layout{
+  grid-template-columns:1fr
+ }
+
+ .atom-stage{
+  min-height:340px
+ }
+
+}
+
+@media(max-width:700px){
+
+ body{
+  font-size:14px
+ }
+
+ header{
+  position:static;
+  padding:10px 3%;
+  align-items:flex-start
+ }
+
+ .brand{
+  font-size:17px
+ }
+
+ .brand small{
+  font-size:8px
+ }
+
+ nav{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px
+ }
+
+ nav button{
+  padding:8px 4px;
+  font-size:12px
+ }
+
+ main{
+  padding:14px 3% 40px
+ }
+
+ .hero{
+  padding:20px 16px;
+  border-radius:16px
+ }
+
+ .hero h1{
+  font-size:28px
+ }
+
+ .hero p{
+  font-size:13px
+ }
+
+ .grid{
+  grid-template-columns:1fr
+ }
+
+ .card{
+  padding:13px;
+  border-radius:13px
+ }
+
+ .toolbar{
+  flex-direction:column
+ }
+
+ .toolbar input,
+ .toolbar select{
+  width:100%
+ }
+
+ .legend{
+  gap:5px
+ }
+
+ .legend span{
+  font-size:10px;
+  padding:3px 7px
+ }
+
+ /*
+    مهم:
+    الجدول لا يتم ضغطه داخل عرض الهاتف.
+    يظل كاملًا بعرضه العلمي، ويمكن تحريكه
+    أفقيًا بالإصبع.
+ */
+ .table-wrap{
+  margin-left:-3%;
+  margin-right:-3%;
+  width:106%;
+  padding-left:10px;
+  padding-right:10px
+ }
+
+ .periodic{
+  min-width:900px;
+  grid-template-columns:repeat(18,minmax(46px,1fr));
+  gap:4px
+ }
+
+ .element{
+  min-height:62px;
+  padding:3px
+ }
+
+ .element strong{
+  font-size:17px
+ }
+
+ .element small{
+  font-size:7px
+ }
+
+ .element .mass,
+ .element .z{
+  font-size:8px
+ }
+
+ .f-label{
+  font-size:12px
+ }
+
+ .detail-head{
+  align-items:flex-start
+ }
+
+ .big-symbol{
+  width:85px;
+  height:85px;
+  font-size:48px
+ }
+
+ .config{
+  font-size:15px
+ }
+
+ .shell{
+  padding:8px 10px
+ }
+
+ .atom-stage{
+  min-height:280px
+ }
+
+ .atom-stage svg{
+  min-width:400px
+ }
+
+ .element-picker{
+  grid-template-columns:1fr
+ }
+
+ .element-picker button{
+  width:100%
+ }
+
+ .control-row{
+  grid-template-columns:1fr 1fr
+ }
+
+ .calc-card button{
+  width:100%
+ }
+
+ .calc-result{
+  font-size:13px;
+  overflow-x:auto
+ }
+
+ .result-big{
+  font-size:21px
+ }
+
+}
+
+@media(max-width:420px){
+
+ nav{
+  grid-template-columns:repeat(2,1fr)
+ }
+
+ .periodic{
+  min-width:850px;
+  grid-template-columns:repeat(18,minmax(43px,1fr))
+ }
+
+ .element{
+  min-height:58px
+ }
+
+ .element strong{
+  font-size:15px
+ }
+
+ .element small{
+  font-size:6.5px
+ }
+
+ .element .mass,
+ .element .z{
+  font-size:7px
+ }
+
+ .control-row{
+  grid-template-columns:1fr
+ }
+
+ .atom-stage{
+  min-height:250px
+ }
+
+}
+
+/* منع التحديد العرضي أثناء سحب الجدول على الهاتف */
+.table-wrap,
+.periodic{
+ touch-action:pan-x
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+ <div class="brand">
+  EL-ASHRY PERIODIC LAB
+  <small>THE INTERACTIVE CHEMISTRY ENCYCLOPEDIA</small>
+ </div>
+
+ <nav>
+  <button onclick="showPage('home')">الرئيسية</button>
+  <button onclick="showPage('table')">الجدول الدوري</button>
+  <button onclick="showPage('lab')">معمل الذرة</button>
+  <button onclick="showPage('calculators')">الحاسبات</button>
+  <button onclick="showPage('about')">عن الموسوعة</button>
+  <button onclick="toggleTheme()">◐</button>
+ </nav>
+
+</header>
+
+<main>
+
+<!-- =========================
+     الرئيسية
+========================= -->
+
+<section id="home" class="page active">
+
+ <div class="hero">
+
+  <p>WELCOME TO YOUR CHEMISTRY WORLD</p>
+
+  <h1>EL-ASHRY PERIODIC LAB</h1>
+
+  <p>
+   موسوعة كيميائية تفاعلية لاستكشاف العناصر والذرات والتوزيع الإلكتروني.
+  </p>
+
+  <button class="primary" onclick="showPage('table')">
+   استكشف الجدول الدوري ←
+  </button>
+
+ </div>
+
+ <div class="grid">
+
+  <div class="card">
+   <div class="stat">118</div>
+   <h3>عنصر كيميائي</h3>
+   <p class="muted">استكشف عناصر الجدول الدوري.</p>
+  </div>
+
+  <div class="card">
+   <div class="stat">7</div>
+   <h3>دورات</h3>
+   <p class="muted">الصفوف الأفقية في الجدول.</p>
+  </div>
+
+  <div class="card">
+   <div class="stat">18</div>
+   <h3>مجموعة</h3>
+   <p class="muted">الأعمدة الرأسية في الجدول.</p>
+  </div>
+
+  <div class="card">
+   <div class="stat">s p d f</div>
+   <h3>القطاعات</h3>
+   <p class="muted">قطاعات الجدول حسب المستوى الفرعي الأخير.</p>
+  </div>
+
+ </div>
+
+ <div class="card" style="margin-top:16px">
+
+  <h2>ابدأ من هنا</h2>
+
+  <p>
+   اضغط على أي عنصر في الجدول لتظهر صفحة معلوماته،
+   ومنها التوزيع الإلكتروني الكامل والمختصر وتوزيع الإلكترونات على مستويات الطاقة.
+  </p>
+
+ </div>
+
+</section>
+
+
+<!-- =========================
+     الجدول الدوري
+========================= -->
+
+<section id="table" class="page">
+
+ <h1>الجدول الدوري للعناصر</h1>
+
+ <p class="muted">
+  اضغط على العنصر لعرض بياناته وتوزيعه الإلكتروني.
+  على الهاتف يمكنك سحب الجدول أفقيًا.
+ </p>
+
+ <div class="toolbar">
+
+  <input
+   id="search"
+   class="search"
+   placeholder="ابحث بالاسم أو الرمز أو العدد الذري..."
+   oninput="renderTable()"
+  >
+
+  <select id="filter" onchange="renderTable()">
+   <option value="all">كل العناصر</option>
+   <option value="alkali">فلزات قلوية</option>
+   <option value="alkaline">فلزات قلوية أرضية</option>
+   <option value="transition">عناصر انتقالية</option>
+   <option value="post">فلزات بعد انتقالية</option>
+   <option value="metalloid">أشباه فلزات</option>
+   <option value="nonmetal">لافلزات</option>
+   <option value="halogen">هالوجينات</option>
+   <option value="noble">غازات نبيلة</option>
+   <option value="lanthanide">لانثانيدات</option>
+   <option value="actinide">أكتينيدات</option>
+  </select>
+
+ </div>
+
+ <div class="legend">
+
+  <span class="alkali">قلوية</span>
+  <span class="alkaline">قلوية أرضية</span>
+  <span class="transition">انتقالية</span>
+  <span class="post">بعد انتقالية</span>
+  <span class="metalloid">أشباه فلزات</span>
+  <span class="nonmetal">لافلزات</span>
+  <span class="halogen">هالوجينات</span>
+  <span class="noble">نبيلة</span>
+
+ </div>
+
+ <div class="table-wrap">
+  <div id="periodic" class="periodic"></div>
+ </div>
+
+</section>
+
+
+<!-- =========================
+     صفحة العنصر
+========================= -->
+
+<section id="element" class="page">
+
+ <button onclick="showPage('table')">
+  ← العودة للجدول الدوري
+ </button>
+
+ <div id="elementContent"></div>
+
+</section>
+
+
+<!-- =========================
+     معمل الذرة
+========================= -->
+
+<section id="lab" class="page">
+
+ <h1>معمل الذرة التفاعلي</h1>
+
+ <p class="muted">
+  اختر أي عنصر من العناصر الـ118 أو غيّر العدد الذري والإلكترونات
+  وشاهد نموذج الذرة يتحدث تلقائيًا.
+ </p>
+
+ <div class="lab-layout">
+
+  <div class="card lab-controls">
+
+   <!-- اختيار أي عنصر -->
+
+   <div class="control-group">
+
+    <label for="labElementSelect">
+     اختيار العنصر
+    </label>
+
+    <div class="element-selector">
+
+     <select
+      id="labElementSelect"
+      onchange="selectLabElement(this.value)"
+     ></select>
+
+     <div id="labElementPreview" class="element-preview"></div>
+
+    </div>
+
+    <div class="calc-hint">
+     القائمة تحتوي على جميع العناصر الـ118.
+     يمكنك الاختيار بالاسم أو الرمز أو العدد الذري.
+    </div>
+
+   </div>
+
+
+   <!-- العدد الذري -->
+
+   <div class="control-group">
+
+    <label for="labZ">
+     العدد الذري (عدد البروتونات)
+    </label>
+
+    <input
+     id="labZ"
+     type="number"
+     min="1"
+     max="118"
+     value="6"
+     oninput="renderAtomLab(true)"
+    >
+
+    <input
+     id="labZRange"
+     type="range"
+     min="1"
+     max="118"
+     value="6"
+     oninput="syncLabZ(this.value)"
+     style="margin-top:10px"
+    >
+
+    <div class="calc-hint">
+     يمكنك إدخال أي عدد ذري من 1 إلى 118.
+    </div>
+
+   </div>
+
+
+   <!-- الإلكترونات -->
+
+   <div class="control-group">
+
+    <label for="labElectrons">
+     عدد الإلكترونات
+    </label>
+
+    <input
+     id="labElectrons"
+     type="number"
+     min="0"
+     max="150"
+     value="6"
+     oninput="renderAtomLab(false)"
+    >
+
+    <div class="calc-hint">
+     غيّر العدد لمشاهدة الذرة المتعادلة أو الأيون.
+    </div>
+
+   </div>
+
+
+   <!-- العدد الكتلي -->
+
+   <div class="control-group">
+
+    <label for="labMassNumber">
+     العدد الكتلي (بروتونات + نيوترونات)
+    </label>
+
+    <input
+     id="labMassNumber"
+     type="number"
+     min="1"
+     max="350"
+     value="12"
+     oninput="renderAtomLab(false)"
+    >
+
+    <div class="calc-hint">
+     القيمة الافتراضية تقريبية، ويمكنك تغييرها لدراسة نظير معين.
+    </div>
+
+   </div>
+
+
+   <button class="primary" onclick="resetAtomLab()">
+    إعادة الذرة المتعادلة
+   </button>
+
+   <div id="atomInfo" class="result-box"></div>
+
+  </div>
+
+
+  <div>
+
+   <div class="atom-stage" id="atomDrawing">
+    <p style="color:#d6e8f3">
+     جاري تجهيز نموذج الذرة...
+    </p>
+   </div>
+
+   <div id="atomSummary" class="atom-summary"></div>
+
+   <div class="card atom-note">
+
+    <b>ملاحظة علمية:</b>
+
+    هذا رسم تعليمي مبسط مستوحى من نموذج بور؛
+    لا يمثل أحجام الذرة أو المدارات الحقيقية أو حركة الإلكترونات
+    الفعلية بمقياس واقعي.
+
+    توزيع الأيونات على الأغلفة هنا توضيحي،
+    وليس بديلًا عن التوزيع المداري الدقيق للأيونات.
+
+   </div>
+
+  </div>
+
+ </div>
+
+</section>
+
+
+<!-- =========================
+     الحاسبات
+========================= -->
+
+<section id="calculators" class="page">
+
+ <h1>مركز الحاسبات الكيميائية</h1>
+
+ <p class="muted">
+  اختر الحاسبة المناسبة، أدخل القيم والوحدات،
+  وستظهر لك النتيجة مع خطوات الحساب.
+ </p>
+
+
+ <div class="grid">
+
+
+  <!-- =========================
+       الكتلة المولية
+  ========================= -->
+
+  <div class="card calc-card">
+
+   <h3>1. الكتلة المولية</h3>
+
+   <p class="calc-hint">
+    اكتب الصيغة الكيميائية للمركب، أو اختر أي عنصر من الـ118 لإضافته.
+   </p>
+
+
+   <label>
+    اختيار عنصر
+   </label>
+
+   <select
+    id="massElementSelect"
+    onchange="insertSelectedElement()"
+   ></select>
+
+
+   <div class="selected-element-box" id="massSelectedInfo"></div>
+
+
+   <input
+    id="formula"
+    class="formula-input"
+    placeholder="مثال: H2O"
+   >
+
+
+   <div>
+
+    <button class="example-btn" onclick="setFormula('H2O')">
+     H₂O
+    </button>
+
+    <button class="example-btn" onclick="setFormula('CO2')">
+     CO₂
+    </button>
+
+    <button class="example-btn" onclick="setFormula('Ca(OH)2')">
+     Ca(OH)₂
+    </button>
+
+    <button class="example-btn" onclick="setFormula('H2SO4')">
+     H₂SO₄
+    </button>
+
+   </div>
+
+
+   <button class="primary" onclick="calcMass()">
+    احسب الكتلة المولية
+   </button>
+
+   <div id="massResult" class="calc-result">
+    النتيجة ستظهر هنا.
+   </div>
+
+  </div>
+
+
+  <!-- =========================
+       المولات
+  ========================= -->
+
+  <div class="card calc-card">
+
+   <h3>2. حساب عدد المولات</h3>
+
+   <p class="calc-hint">
+    القانون: عدد المولات = الكتلة ÷ الكتلة المولية.
+    يمكنك اختيار أي عنصر من الـ118 لتعبئة كتلته المولية.
+   </p>
+
+
+   <label>
+    اختيار عنصر
+   </label>
+
+   <select
+    id="molesElementSelect"
+    onchange="useElementMassForMoles(this.value)"
+   ></select>
+
+
+   <div
+    id="molesElementInfo"
+    class="selected-element-box"
+   ></div>
+
+
+   <label>
+    الكتلة (جرام)
+   </label>
+
+   <input
+    id="mass"
+    type="number"
+    min="0"
+    step="any"
+    placeholder="مثال: 36"
+   >
+
+
+   <label>
+    الكتلة المولية (g/mol)
+   </label>
+
+   <input
+    id="molar"
+    type="number"
+    min="0"
+    step="any"
+    placeholder="مثال: 18"
+   >
+
+
+   <button class="primary" onclick="calcMoles()">
+    احسب عدد المولات
+   </button>
+
+
+   <div id="molesResult" class="calc-result">
+    النتيجة ستظهر هنا.
+   </div>
+
+  </div>
+
+
+  <!-- =========================
+       الجسيمات
+  ========================= -->
+
+  <div class="card calc-card">
+
+   <h3>3. عدد الجسيمات</h3>
+
+   <p class="calc-hint">
+    عدد الجسيمات = عدد المولات × ثابت أفوجادرو.
+   </p>
+
+   <label>
+    عدد المولات (mol)
+   </label>
+
+   <input
+    id="moles"
+    type="number"
+    min="0"
+    step="any"
+    placeholder="مثال: 2"
+   >
+
+   <button class="primary" onclick="calcParticles()">
+    احسب عدد الجسيمات
+   </button>
+
+   <div id="particlesResult" class="calc-result">
+    النتيجة ستظهر هنا.
+   </div>
+
+  </div>
+
+
+  <!-- =========================
+       التركيز
+  ========================= -->
+
+  <div class="card calc-card">
+
+   <h3>4. التركيز المولاري</h3>
+
+   <p class="calc-hint">
+    التركيز المولاري = عدد مولات المذاب ÷ حجم المحلول باللتر.
+   </p>
+
+   <label>
+    عدد مولات المذاب (mol)
+   </label>
+
+   <input
+    id="concMoles"
+    type="number"
+    min="0"
+    step="any"
+    placeholder="مثال: 0.5"
+   >
+
+   <label>
+    حجم المحلول (mL)
+   </label>
+
+   <input
+    id="concVolume"
+    type="number"
+    min="0"
+    step="any"
+    placeholder="مثال: 250"
+   >
+
+   <button class="primary" onclick="calcConcentration()">
+    احسب التركيز
+   </button>
+
+   <div id="concentrationResult" class="calc-result">
+    النتيجة ستظهر هنا.
+   </div>
+
+  </div>
+
+ </div>
+
+
+ <!-- =========================
+      موازنة المعادلات
+ ========================= -->
+
+ <div class="card" style="margin-top:16px">
+
+  <h2>5. موازنة المعادلات الكيميائية</h2>
+
+  <p class="muted">
+   اكتب المتفاعلات ثم السهم ثم النواتج.
+   استخدم + للفصل بين المواد.
+  </p>
+
+  <input
+   id="reaction"
+   class="formula-input"
+   dir="ltr"
+   placeholder="H2 + O2 -> H2O"
+  >
+
+  <div>
+
+   <button
+    class="example-btn"
+    onclick="setReaction('H2 + O2 -> H2O')"
+   >
+    مثال الماء
+   </button>
+
+   <button
+    class="example-btn"
+    onclick="setReaction('Fe + O2 -> Fe2O3')"
+   >
+    مثال أكسيد الحديد
+   </button>
+
+   <button
+    class="example-btn"
+    onclick="setReaction('N2 + H2 -> NH3')"
+   >
+    مثال الأمونيا
+   </button>
+
+  </div>
+
+  <button class="primary" onclick="balance()">
+   وازن المعادلة
+  </button>
+
+  <div id="balanceResult" class="calc-result">
+   المعادلة المتزنة ستظهر هنا.
+  </div>
+
+  <p class="calc-hint">
+   ملاحظة: هذه النسخة تدعم الصيغ البسيطة والأقواس
+   في المركبات، ولا تدعم حاليًا المعادلات الأيونية
+   أو الإلكترونات أو حالات المادة.
+  </p>
+
+ </div>
+
+</section>
+
+
+<!-- =========================
+     عن الموسوعة
+========================= -->
+
+<section id="about" class="page">
+
+ <div class="hero">
+
+  <h1>عن EL-ASHRY PERIODIC LAB</h1>
+
+  <p>
+   موسوعة تعليمية تفاعلية لاستكشاف الكيمياء والجدول الدوري.
+  </p>
+
+ </div>
+
+
+ <div class="card">
+
+  <h2>Developed by EL-ASHRY</h2>
+
+  <p>
+   تم تصميم هذه الموسوعة لتكون نقطة بداية لفهم العناصر
+   والذرات والتوزيع الإلكتروني والحسابات الكيميائية.
+  </p>
+
+  <p class="muted">
+   المعلومات التعليمية المبسطة لا تغني عن المراجع العلمية المتخصصة.
+  </p>
+
+ </div>
+
+
+ <div class="card">
+
+  <h3>المراجع العلمية</h3>
+
+  <p>
+   <a href="https://www.nist.gov/pml/periodic-table-elements" target="_blank">
+    NIST Periodic Table
+   </a>
+  </p>
+
+  <p>
+   <a href="https://iupac.org/what-we-do/periodic-table-of-elements/" target="_blank">
+    IUPAC Periodic Table
+   </a>
+  </p>
+
+  <p>
+   <a href="https://pubchem.ncbi.nlm.nih.gov/periodic-table/" target="_blank">
+    PubChem Periodic Table
+   </a>
+  </p>
+
+  <p>
+   <a href="https://periodic-table.rsc.org/" target="_blank">
+    Royal Society of Chemistry
+   </a>
+  </p>
+
+ </div>
+
+</section>
+
+</main>
+
+
+<footer>
+ EL-ASHRY PERIODIC LAB · Developed by EL-ASHRY
+</footer>
+
+
+<script>
+
+/* =========================================================
+   البيانات الأساسية للعناصر الـ118
+========================================================= */
+
+const raw = `
+H|Hydrogen|1.008|1|1
+He|Helium|4.0026|18|1
+Li|Lithium|6.94|1|2
+Be|Beryllium|9.0122|2|2
+B|Boron|10.81|13|2
+C|Carbon|12.011|14|2
+N|Nitrogen|14.007|15|2
+O|Oxygen|15.999|16|2
+F|Fluorine|18.998|17|2
+Ne|Neon|20.180|18|2
+Na|Sodium|22.990|1|3
+Mg|Magnesium|24.305|2|3
+Al|Aluminium|26.982|13|3
+Si|Silicon|28.085|14|3
+P|Phosphorus|30.974|15|3
+S|Sulfur|32.06|16|3
+Cl|Chlorine|35.45|17|3
+Ar|Argon|39.948|18|3
+K|Potassium|39.098|1|4
+Ca|Calcium|40.078|2|4
+Sc|Scandium|44.956|3|4
+Ti|Titanium|47.867|4|4
+V|Vanadium|50.942|5|4
+Cr|Chromium|51.996|6|4
+Mn|Manganese|54.938|7|4
+Fe|Iron|55.845|8|4
+Co|Cobalt|58.933|9|4
+Ni|Nickel|58.693|10|4
+Cu|Copper|63.546|11|4
+Zn|Zinc|65.38|12|4
+Ga|Gallium|69.723|13|4
+Ge|Germanium|72.630|14|4
+As|Arsenic|74.922|15|4
+Se|Selenium|78.971|16|4
+Br|Bromine|79.904|17|4
+Kr|Krypton|83.798|18|4
+Rb|Rubidium|85.468|1|5
+Sr|Strontium|87.62|2|5
+Y|Yttrium|88.906|3|5
+Zr|Zirconium|91.224|4|5
+Nb|Niobium|92.906|5|5
+Mo|Molybdenum|95.95|6|5
+Tc|Technetium|98|7|5
+Ru|Ruthenium|101.07|8|5
+Rh|Rhodium|102.906|9|5
+Pd|Palladium|106.42|10|5
+Ag|Silver|107.868|11|5
+Cd|Cadmium|112.414|12|5
+In|Indium|114.818|13|5
+Sn|Tin|118.710|14|5
+Sb|Antimony|121.760|15|5
+Te|Tellurium|127.60|16|5
+I|Iodine|126.904|17|5
+Xe|Xenon|131.293|18|5
+Cs|Caesium|132.905|1|6
+Ba|Barium|137.327|2|6
+La|Lanthanum|138.905|3|6
+Ce|Cerium|140.116|3|6
+Pr|Praseodymium|140.908|3|6
+Nd|Neodymium|144.242|3|6
+Pm|Promethium|145|3|6
+Sm|Samarium|150.36|3|6
+Eu|Europium|151.964|3|6
+Gd|Gadolinium|157.25|3|6
+Tb|Terbium|158.925|3|6
+Dy|Dysprosium|162.500|3|6
+Ho|Holmium|164.930|3|6
+Er|Erbium|167.259|3|6
+Tm|Thulium|168.934|3|6
+Yb|Ytterbium|173.045|3|6
+Lu|Lutetium|174.967|3|6
+Hf|Hafnium|178.49|4|6
+Ta|Tantalum|180.948|5|6
+W|Tungsten|183.84|6|6
+Re|Rhenium|186.207|7|6
+Os|Osmium|190.23|8|6
+Ir|Iridium|192.217|9|6
+Pt|Platinum|195.084|10|6
+Au|Gold|196.967|11|6
+Hg|Mercury|200.592|12|6
+Tl|Thallium|204.38|13|6
+Pb|Lead|207.2|14|6
+Bi|Bismuth|208.980|15|6
+Po|Polonium|209|16|6
+At|Astatine|210|17|6
+Rn|Radon|222|18|6
+Fr|Francium|223|1|7
+Ra|Radium|226|2|7
+Ac|Actinium|227|3|7
+Th|Thorium|232.038|3|7
+Pa|Protactinium|231.036|3|7
+U|Uranium|238.029|3|7
+Np|Neptunium|237|3|7
+Pu|Plutonium|244|3|7
+Am|Americium|243|3|7
+Cm|Curium|247|3|7
+Bk|Berkelium|247|3|7
+Cf|Californium|251|3|7
+Es|Einsteinium|252|3|7
+Fm|Fermium|257|3|7
+Md|Mendelevium|258|3|7
+No|Nobelium|259|3|7
+Lr|Lawrencium|266|3|7
+Rf|Rutherfordium|267|4|7
+Db|Dubnium|268|5|7
+Sg|Seaborgium|269|6|7
+Bh|Bohrium|270|7|7
+Hs|Hassium|277|8|7
+Mt|Meitnerium|278|9|7
+Ds|Darmstadtium|281|10|7
+Rg|Roentgenium|282|11|7
+Cn|Copernicium|285|12|7
+Nh|Nihonium|286|13|7
+Fl|Flerovium|289|14|7
+Mc|Moscovium|290|15|7
+Lv|Livermorium|293|16|7
+Ts|Tennessine|294|17|7
+Og|Oganesson|294|18|7
+`.trim();
+
+
+const elements=raw.split("\n").map((line,i)=>{
+
+ const [symbol,name,mass,group,period]=line.split("|");
+
+ return {
+  z:i+1,
+  symbol,
+  name,
+  mass:Number(mass),
+  group:Number(group),
+  period:Number(period)
+ };
+
+});
+
+
+/* =========================================================
+   التوزيع الإلكتروني
+========================================================= */
+
+const exceptions={
+
+ 24:"[Ar] 3d5 4s1",
+ 29:"[Ar] 3d10 4s1",
+ 41:"[Kr] 4d4 5s1",
+ 42:"[Kr] 4d5 5s1",
+ 44:"[Kr] 4d7 5s1",
+ 45:"[Kr] 4d8 5s1",
+ 46:"[Kr] 4d10",
+ 47:"[Kr] 4d10 5s1",
+ 57:"[Xe] 5d1 6s2",
+ 58:"[Xe] 4f1 5d1 6s2",
+ 64:"[Xe] 4f7 5d1 6s2",
+ 78:"[Xe] 4f14 5d9 6s1",
+ 79:"[Xe] 4f14 5d10 6s1",
+ 89:"[Rn] 6d1 7s2",
+ 90:"[Rn] 6d2 7s2",
+ 91:"[Rn] 5f2 6d1 7s2",
+ 92:"[Rn] 5f3 6d1 7s2",
+ 93:"[Rn] 5f4 6d1 7s2",
+ 96:"[Rn] 5f7 6d1 7s2",
+ 103:"[Rn] 5f14 7s2 7p1",
+ 110:"[Rn] 5f14 6d9 7s1"
+
+};
+
+
+const nobleCores={
+ 2:"He",
+ 10:"Ne",
+ 18:"Ar",
+ 36:"Kr",
+ 54:"Xe",
+ 86:"Rn"
+};
+
+
+const orbitals=[
+
+ [1,"s",2],
+ [2,"s",2],
+ [2,"p",6],
+ [3,"s",2],
+ [3,"p",6],
+ [4,"s",2],
+ [3,"d",10],
+ [4,"p",6],
+ [5,"s",2],
+ [4,"d",10],
+ [5,"p",6],
+ [6,"s",2],
+ [4,"f",14],
+ [5,"d",10],
+ [6,"p",6],
+ [7,"s",2],
+ [5,"f",14],
+ [6,"d",10],
+ [7,"p",6]
+
+];
+
+
+function generatedConfig(z){
+
+ let left=z;
+ let parts=[];
+
+ for(const [n,l,cap] of orbitals){
+
+  if(left<=0)break;
+
+  const count=Math.min(left,cap);
+
+  parts.push({n,l,count});
+
+  left-=count;
+
+ }
+
+ return parts;
+}
+
+
+function expandConfig(z){
+
+ let parts=generatedConfig(z);
+
+ const correction={
+
+  24:[[3,"d",5],[4,"s",1]],
+  29:[[3,"d",10],[4,"s",1]],
+  41:[[4,"d",4],[5,"s",1]],
+  42:[[4,"d",5],[5,"s",1]],
+  44:[[4,"d",7],[5,"s",1]],
+  45:[[4,"d",8],[5,"s",1]],
+  46:[[4,"d",10],[5,"s",0]],
+  47:[[4,"d",10],[5,"s",1]],
+  57:[[4,"f",0],[5,"d",1],[6,"s",2]],
+  58:[[4,"f",1],[5,"d",1],[6,"s",2]],
+  64:[[4,"f",7],[5,"d",1],[6,"s",2]],
+  78:[[4,"f",14],[5,"d",9],[6,"s",1]],
+  79:[[4,"f",14],[5,"d",10],[6,"s",1]],
+  89:[[5,"f",0],[6,"d",1],[7,"s",2]],
+  90:[[5,"f",0],[6,"d",2],[7,"s",2]],
+  91:[[5,"f",2],[6,"d",1],[7,"s",2]],
+  92:[[5,"f",3],[6,"d",1],[7,"s",2]],
+  93:[[5,"f",4],[6,"d",1],[7,"s",2]],
+  96:[[5,"f",7],[6,"d",1],[7,"s",2]],
+  103:[[5,"f",14],[6,"d",0],[7,"s",2],[7,"p",1]]
+
+ };
+
+ if(correction[z]){
+
+  for(const [n,l,count] of correction[z]){
+
+   const item=parts.find(
+    p=>p.n===n&&p.l===l
+   );
+
+   if(item)item.count=count;
+   else if(count)parts.push({n,l,count});
+
+  }
+
+ }
+
+ return parts
+  .filter(p=>p.count>0)
+  .sort(
+   (a,b)=>
+    a.n-b.n||
+    "spdf".indexOf(a.l)-"spdf".indexOf(b.l)
+  );
+
+}
+
+
+function configText(parts){
+
+ return parts
+  .map(p=>`${p.n}${p.l}<sup>${p.count}</sup>`)
+  .join(" ");
+
+}
+
+
+function abbreviatedConfig(z){
+
+ if(z<=2)
+  return configText(expandConfig(z));
+
+ let core=0;
+ let coreName="";
+
+ for(
+  const [n,name]
+  of Object.entries(nobleCores)
+  .map(([a,b])=>[Number(a),b])
+  .sort((a,b)=>b[0]-a[0])
+ ){
+
+  if(n<z){
+   core=n;
+   coreName=name;
+   break;
+  }
+
+ }
+
+ const rest=expandConfig(z);
+ const coreParts=expandConfig(core);
+ const remaining=rest.map(p=>({...p}));
+
+ for(const cp of coreParts){
+
+  const item=remaining.find(
+   p=>p.n===cp.n&&p.l===cp.l
+  );
+
+  if(item)
+   item.count-=cp.count;
+
+ }
+
+ return `[${coreName}] `+
+  configText(
+   remaining.filter(p=>p.count>0)
+  );
+
+}
+
+
+function shellCounts(parts){
+
+ const shells=[0,0,0,0,0,0,0];
+
+ parts.forEach(
+  p=>shells[p.n-1]+=p.count
+ );
+
+ return shells.filter(
+  (x)=>x>0
+ );
+
+}
+
+
+function blockOf(z){
+
+ if(z===2)return "s";
+
+ if(
+  (z>=58&&z<=71)||
+  (z>=90&&z<=103)
+ )
+  return "f";
+
+ const p=expandConfig(z);
+
+ return p[p.length-1]?.l||"s";
+
+}
+
+
+/* =========================================================
+   تصنيف العناصر
+========================================================= */
+
+function category(e){
+
+ const z=e.z;
+ const g=e.group;
+
+ if(z>=57&&z<=71)
+  return ["lanthanide","لانثانيد"];
+
+ if(z>=89&&z<=103)
+  return ["actinide","أكتينيد"];
+
+ if(g===1&&z!==1)
+  return ["alkali","فلز قلوي"];
+
+ if(g===2)
+  return ["alkaline","فلز قلوي أرضي"];
+
+ if(g>=3&&g<=12)
+  return ["transition","عنصر انتقالي"];
+
+ if([9,17,35,53,85,117].includes(z))
+  return ["halogen","هالوجين"];
+
+ if([2,10,18,36,54,86,118].includes(z))
+  return ["noble","غاز نبيل"];
+
+ if([5,14,32,33,51,52].includes(z))
+  return ["metalloid","شبه فلز"];
+
+ if([1,6,7,8,15,16,34].includes(z))
+  return ["nonmetal","لافلز"];
+
+ if(g>=13)
+  return ["post","فلز بعد انتقالي"];
+
+ return ["unknown","غير مصنف"];
+
+}
+
+
+function getElement(z){
+
+ return elements.find(
+  e=>e.z===Number(z)
+ );
+
+}
+
+
+/* =========================================================
+   الصفحات
+========================================================= */
+
+function showPage(id){
+
+ document
+  .querySelectorAll(".page")
+  .forEach(
+   p=>p.classList.remove("active")
+  );
+
+ document
+  .getElementById(id)
+  .classList.add("active");
+
+ window.scrollTo({
+  top:0,
+  behavior:"smooth"
+ });
+
+ if(id==="lab")
+  renderAtomLab(false);
+
+}
+
+
+function toggleTheme(){
+
+ document.body.classList.toggle("light");
+
+}
+
+
+/* =========================================================
+   الجدول الدوري
+========================================================= */
+
+function renderTable(){
+
+ const q=
+  (document.getElementById("search")?.value||"")
+  .toLowerCase()
+  .trim();
+
+ const filter=
+  document.getElementById("filter")?.value||"all";
+
+ const root=
+  document.getElementById("periodic");
+
+ root.innerHTML="";
+
+ for(let period=1;period<=7;period++){
+
+  for(let group=1;group<=18;group++){
+
+   const e=elements.find(
+    x=>
+     x.period===period&&
+     x.group===group&&
+     !(
+      (x.z>=58&&x.z<=71)||
+      (x.z>=90&&x.z<=103)
+     )
+   );
+
+   const cell=document.createElement("div");
+
+   if(!e){
+
+    cell.className="spacer-cell";
+    root.appendChild(cell);
+    continue;
+
+   }
+
+   const [cat]=category(e);
+
+   const matches=
+    (
+     !q||
+     `${e.z} ${e.symbol} ${e.name}`
+      .toLowerCase()
+      .includes(q)
+    );
+
+   if(
+    !(filter==="all"||filter===cat)||
+    !matches
+   ){
+
+    cell.className="spacer-cell";
+    root.appendChild(cell);
+    continue;
+
+   }
+
+   cell.className=`element ${cat}`;
+
+   cell.innerHTML=`
+    <span class="z">${e.z}</span>
+    <strong>${e.symbol}</strong>
+    <small>${e.name}</small>
+    <span class="mass">${e.mass}</span>
+   `;
+
+   cell.onclick=()=>openElement(e.z);
+
+   root.appendChild(cell);
+
+  }
+
+ }
+
+ const label1=
+  document.createElement("div");
+
+ label1.className="f-label";
+ label1.textContent="اللانثانيدات";
+
+ root.appendChild(label1);
+
+ elements
+  .filter(x=>x.z>=58&&x.z<=71)
+  .forEach(
+   e=>addFCell(e,root,q,filter)
+  );
+
+
+ const label2=
+  document.createElement("div");
+
+ label2.className="f-label";
+ label2.textContent="الأكتينيدات";
+
+ root.appendChild(label2);
+
+ elements
+  .filter(x=>x.z>=90&&x.z<=103)
+  .forEach(
+   e=>addFCell(e,root,q,filter)
+  );
+
+}
+
+
+function addFCell(e,root,q,filter){
+
+ const [cat]=category(e);
+
+ const cell=
+  document.createElement("div");
+
+ if(
+  (
+   q&&
+   !`${e.z} ${e.symbol} ${e.name}`
+    .toLowerCase()
+    .includes(q)
+  )||
+  (
+   filter!=="all"&&
+   filter!==cat
+  )
+ ){
+
+  cell.className="spacer-cell";
+  root.appendChild(cell);
+  return;
+
+ }
+
+ cell.className=`element ${cat}`;
+
+ cell.innerHTML=`
+  <span class="z">${e.z}</span>
+  <strong>${e.symbol}</strong>
+  <small>${e.name}</small>
+  <span class="mass">${e.mass}</span>
+ `;
+
+ cell.onclick=()=>openElement(e.z);
+
+ root.appendChild(cell);
+
+}
+
+
+/* =========================================================
+   صفحة العنصر
+========================================================= */
+
+function openElement(z){
+
+ const e=getElement(z);
+
+ if(!e)return;
+
+ const [cat,catAr]=category(e);
+
+ const parts=expandConfig(z);
+
+ const shells=shellCounts(parts);
+
+ const content=
+  document.getElementById("elementContent");
+
+ content.innerHTML=`
+
+ <div class="card" style="margin-top:18px">
+
+  <div class="detail-head">
+
+   <div class="big-symbol">
+    ${e.symbol}
+   </div>
+
+   <div>
+
+    <h1>${e.name}</h1>
+
+    <p class="muted">
+     العدد الذري ${e.z} · ${catAr}
+    </p>
+
+    <div class="stat">
+     ${e.mass}
+    </div>
+
+    <small class="muted">
+     الكتلة الذرية النسبية
+     (قيمة تقريبية/قياسية حسب العنصر)
+    </small>
+
+   </div>
+
+  </div>
+
+ </div>
+
+
+ <div class="tabs">
+
+  <button
+   class="tab active"
+   onclick="elementTab('overview',this)"
+  >
+   نظرة عامة
+  </button>
+
+  <button
+   class="tab"
+   onclick="elementTab('electron',this)"
+  >
+   التوزيع الإلكتروني
+  </button>
+
+  <button
+   class="tab"
+   onclick="elementTab('atom',this)"
+  >
+   الذرة
+  </button>
+
+  <button
+   class="tab"
+   onclick="elementTab('facts',this)"
+  >
+   معلومات إضافية
+  </button>
+
+ </div>
+
+
+ <div id="overview" class="element-tab">
+
+  <div class="info-grid">
+
+   ${info("العدد الذري",e.z)}
+   ${info("الكتلة الذرية",e.mass)}
+   ${info("المجموعة",e.group)}
+   ${info("الدورة",e.period)}
+   ${info("القطاع",blockOf(z))}
+   ${info("التصنيف",catAr)}
+   ${info("إلكترونات الذرة المتعادلة",e.z)}
+   ${info(
+    "إلكترونات الغلاف الخارجي وفق التوزيع المحسوب",
+    shells[shells.length-1]
+   )}
+
+  </div>
+
+  <div class="card" style="margin-top:14px">
+
+   <h3>عنصر ${e.name}</h3>
+
+   <p>
+    الرمز الكيميائي:
+    <b>${e.symbol}</b>.
+    العدد الذري يساوي عدد البروتونات في نواة الذرة،
+    ويساوي عدد الإلكترونات في الذرة المتعادلة.
+   </p>
+
+   <p class="muted">
+    هذه صفحة بيانات أساسية.
+    لا تعرض الموسوعة هنا خواصًا أو استخدامات
+    غير متحققة من مصدر علمي.
+   </p>
+
+  </div>
+
+ </div>
+
+
+ <div id="electron" class="element-tab hidden">
+
+  <div class="card">
+
+   <h2>التوزيع الإلكتروني الكامل</h2>
+
+   <p class="muted">
+    ترتيب الإلكترونات في المستويات الفرعية
+    للذرة المتعادلة وفق النموذج المستخدم.
+   </p>
+
+   <div class="config">
+    ${configText(parts)}
+   </div>
+
+  </div>
+
+
+  <div class="card" style="margin-top:12px">
+
+   <h2>التوزيع الإلكتروني المختصر</h2>
+
+   <div class="config">
+    ${abbreviatedConfig(z)}
+   </div>
+
+   <p class="muted">
+    الرمز بين الأقواس يمثل الغاز النبيل السابق في العدد الذري.
+   </p>
+
+  </div>
+
+
+  <div class="card" style="margin-top:12px">
+
+   <h2>
+    التوزيع على مستويات الطاقة الرئيسية
+   </h2>
+
+   <div class="shells">
+
+    ${shells.map(
+     (n,i)=>`
+      <div class="shell">
+       <span>المستوى ${i+1}</span>
+       <strong>${n}</strong>
+       <small>إلكترون</small>
+      </div>
+     `
+    ).join("")}
+
+   </div>
+
+   <p class="muted">
+    مجموع الإلكترونات =
+    ${shells.reduce((a,b)=>a+b,0)}
+    إلكترون.
+   </p>
+
+  </div>
+
+
+  <div class="card" style="margin-top:12px">
+
+   <h3>ملاحظات علمية</h3>
+
+   <p>
+    التوزيع الإلكتروني يصف ترتيب الإلكترونات
+    في المدارات الذرية.
+    توجد استثناءات عن ترتيب الملء البسيط.
+   </p>
+
+   <p class="muted">
+    لبعض العناصر الثقيلة جدًا،
+    قد تكون التوزيعات المعروضة تقريبية
+    أو مبنية على توقعات نظرية.
+    راجع بيانات NIST للحالات المقاسة.
+   </p>
+
+  </div>
+
+ </div>
+
+
+ <div id="atom" class="element-tab hidden">
+
+  <div class="info-grid">
+
+   ${info("عدد البروتونات",z)}
+
+   ${info(
+    "عدد الإلكترونات للذرة المتعادلة",
+    z
+   )}
+
+   ${info(
+    "مجموع إلكترونات الأغلفة",
+    shells.reduce((a,b)=>a+b,0)
+   )}
+
+   ${info(
+    "القطاع الإلكتروني",
+    blockOf(z)
+   )}
+
+  </div>
+
+
+  <div class="card" style="margin-top:14px">
+
+   <h3>مستويات الطاقة</h3>
+
+   ${shells.map(
+    (n,i)=>
+     `<p>
+       المستوى ${i+1}:
+       <b>${n}</b> إلكترون
+      </p>`
+   ).join("")}
+
+  </div>
+
+ </div>
+
+
+ <div id="facts" class="element-tab hidden">
+
+  <div class="card">
+
+   <h3>معلومات موثقة مطلوبة للإكمال</h3>
+
+   <p>
+    تحتاج تفاصيل مثل النظائر،
+    حالات التأكسد، الكثافة،
+    درجات الانصهار والغليان،
+    تاريخ الاكتشاف، ومصادر الاستخلاص
+    إلى قاعدة بيانات علمية مستقلة لكل عنصر.
+   </p>
+
+   <p>
+    لن نضع قيمًا تخمينية على أنها حقائق.
+   </p>
+
+   <p>
+    <a
+     href="https://www.nist.gov/pml/periodic-table-elements"
+     target="_blank"
+    >
+     مصدر NIST
+    </a>
+
+    ·
+
+    <a
+     href="https://periodic-table.rsc.org/"
+     target="_blank"
+    >
+     مصدر RSC
+    </a>
+   </p>
+
+  </div>
+
+ </div>
+
+ `;
+
+ showPage("element");
+
+}
+
+
+function info(label,value){
+
+ return `
+  <div class="info">
+   <b>${label}</b>
+   ${value}
+  </div>
+ `;
+
+}
+
+
+function elementTab(id,btn){
+
+ document
+  .querySelectorAll(".element-tab")
+  .forEach(
+   x=>x.classList.add("hidden")
+  );
+
+ document
+  .getElementById(id)
+  .classList.remove("hidden");
+
+ document
+  .querySelectorAll(".tabs .tab")
+  .forEach(
+   x=>x.classList.remove("active")
+  );
+
+ btn.classList.add("active");
+
+}
+
+
+/* =========================================================
+   قوائم العناصر الـ118
+========================================================= */
+
+function fillElementSelect(selectId,includePlaceholder=true){
+
+ const select=
+  document.getElementById(selectId);
+
+ if(!select)return;
+
+ select.innerHTML="";
+
+ if(includePlaceholder){
+
+  const first=
+   document.createElement("option");
+
+  first.value="";
+  first.textContent=
+   "اختر عنصرًا من العناصر الـ118...";
+
+  select.appendChild(first);
+
+ }
+
+ elements.forEach(e=>{
+
+  const option=
+   document.createElement("option");
+
+  option.value=e.z;
+
+  option.textContent=
+   `${e.z} — ${e.symbol} — ${e.name}`;
+
+  select.appendChild(option);
+
+ });
+
+}
+
+
+function fillAllElementSelectors(){
+
+ fillElementSelect(
+  "labElementSelect",
+  false
+ );
+
+ fillElementSelect(
+  "massElementSelect",
+  true
+ );
+
+ fillElementSelect(
+  "molesElementSelect",
+  true
+ );
+
+}
+
+
+/* =========================================================
+   اختيار عنصر معمل الذرة
+========================================================= */
+
+function selectLabElement(z){
+
+ z=Number(z);
+
+ if(!z)return;
+
+ const e=getElement(z);
+
+ if(!e)return;
+
+ document.getElementById("labZ").value=z;
+
+ document.getElementById("labZRange").value=z;
+
+ document.getElementById("labElectrons").value=z;
+
+ document.getElementById("labMassNumber").value=
+  Math.round(e.mass);
+
+ updateLabPreview(e);
+
+ renderAtomLab(true);
+
+}
+
+
+function updateLabPreview(e){
+
+ const box=
+  document.getElementById("labElementPreview");
+
+ if(!box||!e)return;
+
+ const [cat]=category(e);
+
+ box.innerHTML=`
+
+  <div
+   class="element-preview-symbol ${cat}"
+  >
+   ${e.symbol}
+  </div>
+
+  <div class="element-preview-info">
+
+   <strong>
+    ${e.name}
+   </strong>
+
+   <small>
+    العدد الذري ${e.z} · الكتلة ${e.mass}
+   </small>
+
+  </div>
+
+ `;
+
+}
+
+
+/* =========================================================
+   معمل الذرة
+========================================================= */
+
+function syncLabZ(value){
+
+ document.getElementById("labZ").value=value;
+
+ const select=
+  document.getElementById("labElementSelect");
+
+ if(select)
+  select.value=String(value);
+
+ renderAtomLab(true);
+
+}
+
+
+function setLabElement(z){
+
+ selectLabElement(z);
+
+}
+
+
+function resetAtomLab(){
+
+ const z=
+  Number(
+   document.getElementById("labZ").value
+  )||6;
+
+ const e=getElement(z);
+
+ document.getElementById("labElectrons").value=z;
+
+ if(e)
+  document.getElementById("labMassNumber").value=
+   Math.round(e.mass);
+
+ renderAtomLab(true);
+
+}
+
+
+function adjustShellsForElectrons(
+ neutralShells,
+ electronCount
+){
+
+ let shells=neutralShells.slice();
+
+ let neutralTotal=
+  shells.reduce(
+   (a,b)=>a+b,
+   0
+  );
+
+ let difference=
+  electronCount-neutralTotal;
+
+ if(difference<0){
+
+  let remove=-difference;
+
+  for(
+   let i=shells.length-1;
+   i>=0&&remove>0;
+   i--
+  ){
+
+   const take=
+    Math.min(
+     shells[i],
+     remove
+    );
+
+   shells[i]-=take;
+
+   remove-=take;
+
+  }
+
+ }else if(difference>0){
+
+  if(shells.length===0)
+   shells=[0];
+
+  shells[shells.length-1]+=difference;
+
+ }
+
+ while(
+  shells.length>1&&
+  shells[shells.length-1]===0
+ )
+  shells.pop();
+
+ return shells;
+
+}
+
+
+function drawAtom(
+ z,
+ electrons,
+ neutrons,
+ shells
+){
+
+ const cx=250;
+ const cy=215;
+ const maxRadius=190;
+
+ const shellMax=
+  Math.max(
+   1,
+   shells.length
+  );
+
+ const radiusStep=
+  Math.min(
+   31,
+   maxRadius/(shellMax+0.4)
+  );
+
+ let svg=`
+
+ <svg
+  viewBox="0 0 500 430"
+  role="img"
+  aria-label="رسم تعليمي تفاعلي للذرة"
+ >
+
+ <defs>
+
+  <radialGradient id="nucleusGlow">
+
+   <stop
+    offset="0%"
+    stop-color="#ffad72"
+   />
+
+   <stop
+    offset="100%"
+    stop-color="#e85e70"
+   />
+
+  </radialGradient>
+
+ </defs>
+ `;
+
+
+ for(
+  let i=0;
+  i<shells.length;
+  i++
+ ){
+
+  const radius=
+   55+i*radiusStep;
+
+  svg+=`
+
+   <circle
+    cx="${cx}"
+    cy="${cy}"
+    r="${radius}"
+    fill="none"
+    stroke="#6c91ad"
+    stroke-width="1.5"
+    stroke-dasharray="5 5"
+    opacity=".8"
+   />
+
+   <text
+    x="${cx+radius+5}"
+    y="${cy-5}"
+    fill="#d8e9f5"
+    font-size="11"
+   >
+    n=${i+1}
+   </text>
+
+  `;
+
+  const count=shells[i];
+
+  for(
+   let j=0;
+   j<count;
+   j++
+  ){
+
+   const angle=
+    (2*Math.PI*j/
+     Math.max(count,1))
+    -
+    Math.PI/2+
+    (i*.17);
+
+   const x=
+    cx+
+    radius*
+    Math.cos(angle);
+
+   const y=
+    cy+
+    radius*
+    Math.sin(angle);
+
+   svg+=`
+
+    <circle
+     class="electron-dot"
+     cx="${x.toFixed(2)}"
+     cy="${y.toFixed(2)}"
+     r="5.3"
+    >
+     <title>
+      إلكترون - الغلاف ${i+1}
+     </title>
+    </circle>
+
+   `;
+
+  }
+
+ }
+
+
+ svg+=`
+
+  <circle
+   cx="${cx}"
+   cy="${cy}"
+   r="36"
+   fill="url(#nucleusGlow)"
+   opacity=".2"
+  />
+
+ `;
+
+
+ const totalNucleus=
+  Math.min(
+   36,
+   Math.max(
+    8,
+    z+neutrons
+   )
+  );
+
+
+ for(
+  let i=0;
+  i<totalNucleus;
+  i++
+ ){
+
+  const angle=
+   i*2.399963;
+
+  const rad=
+   i===0
+   ?0
+   :Math.sqrt(
+     i/totalNucleus
+    )*24;
+
+  const x=
+   cx+
+   rad*Math.cos(angle);
+
+  const y=
+   cy+
+   rad*Math.sin(angle);
+
+  const isProton=
+   i<
+   Math.min(
+    z,
+    totalNucleus
+   );
+
+  svg+=`
+
+   <circle
+    cx="${x.toFixed(2)}"
+    cy="${y.toFixed(2)}"
+    r="5.5"
+    fill="${isProton?"#ff7b7b":"#b5c5d9"}"
+    stroke="#fff"
+    stroke-width=".6"
+   />
+
+  `;
+
+ }
+
+
+ svg+=`
+
+  <text
+   x="250"
+   y="405"
+   text-anchor="middle"
+   fill="#d6e8f3"
+   font-size="13"
+  >
+   النواة: ${z} بروتون · ${neutrons} نيوترون
+  </text>
+
+ </svg>
+ `;
+
+ return svg;
+
+}
+
+
+function renderAtomLab(
+ resetElectrons=false
+){
+
+ const zInput=
+  document.getElementById("labZ");
+
+ if(!zInput)return;
+
+ let z=
+  Math.round(
+   Number(zInput.value)
+  );
+
+ if(!Number.isFinite(z))
+  z=1;
+
+ z=
+  Math.max(
+   1,
+   Math.min(118,z)
+  );
+
+ zInput.value=z;
+
+ document.getElementById(
+  "labZRange"
+ ).value=z;
+
+
+ const e=getElement(z);
+
+ if(!e)return;
+
+
+ const select=
+  document.getElementById(
+   "labElementSelect"
+  );
+
+ if(select)
+  select.value=String(z);
+
+ updateLabPreview(e);
+
+
+ const electronInput=
+  document.getElementById(
+   "labElectrons"
+  );
+
+ if(
+  resetElectrons||
+  !electronInput.value
+ )
+  electronInput.value=z;
+
+
+ let electrons=
+  Math.round(
+   Number(electronInput.value)
+  );
+
+ if(!Number.isFinite(electrons))
+  electrons=z;
+
+ electrons=
+  Math.max(
+   0,
+   Math.min(
+    150,
+    electrons
+   )
+  );
+
+ electronInput.value=electrons;
+
+
+ const massInput=
+  document.getElementById(
+   "labMassNumber"
+  );
+
+ if(
+  resetElectrons||
+  !massInput.value
+ )
+  massInput.value=
+   Math.round(e.mass);
+
+
+ let massNumber=
+  Math.round(
+   Number(massInput.value)
+  );
+
+ if(!Number.isFinite(massNumber))
+  massNumber=
+   Math.round(e.mass);
+
+ massNumber=
+  Math.max(
+   z,
+   Math.min(
+    350,
+    massNumber
+   )
+  );
+
+ massInput.value=massNumber;
+
+
+ const neutrons=
+  massNumber-z;
+
+ const charge=
+  z-electrons;
+
+ const neutralShells=
+  shellCounts(
+   expandConfig(z)
+  );
+
+ const shells=
+  adjustShellsForElectrons(
+   neutralShells,
+   electrons
+  );
+
+
+ const chargeText=
+  charge===0
+   ?"ذرة متعادلة"
+   :charge>0
+    ?`أيون موجب ${charge}+`
+    :`أيون سالب ${Math.abs(charge)}-`;
+
+
+ document.getElementById(
+  "atomDrawing"
+ ).innerHTML=
+  drawAtom(
+   z,
+   electrons,
+   neutrons,
+   shells
+  );
+
+
+ document.getElementById(
+  "atomSummary"
+ ).innerHTML=`
+
+  <div class="atom-stat">
+   <strong>${z}</strong>
+   <span>بروتون</span>
+  </div>
+
+  <div class="atom-stat">
+   <strong>${neutrons}</strong>
+   <span>نيوترون</span>
+  </div>
+
+  <div class="atom-stat">
+   <strong>${electrons}</strong>
+   <span>إلكترون</span>
+  </div>
+
+  <div class="atom-stat">
+   <strong>${shells.length}</strong>
+   <span>غلاف مشغول</span>
+  </div>
+
+ `;
+
+
+ document.getElementById(
+  "atomInfo"
+ ).innerHTML=`
+
+  <h3 style="margin-top:0">
+   ${e.name} (${e.symbol})
+  </h3>
+
+  <div class="charge-pill">
+   ${chargeText}
+  </div>
+
+  <p>
+   العدد الذري:
+   <b>${z}</b>
+  </p>
+
+  <p>
+   العدد الكتلي:
+   <b>${massNumber}</b>
+  </p>
+
+  <p>
+   الشحنة الصافية:
+   <b>
+    ${
+     charge===0
+      ?"0"
+      :charge>0
+       ?"+"+charge
+       :charge
+    }
+   </b>
+  </p>
+
+  <p>
+   توزيع الأغلفة في النموذج:
+   <b dir="ltr">
+    ${shells.join(" - ")||"0"}
+   </b>
+  </p>
+
+  <button
+   class="example-btn"
+   onclick="openElement(${z})"
+  >
+   افتح صفحة العنصر
+  </button>
+
+ `;
+
+}
+
+
+/* =========================================================
+   الحاسبات
+========================================================= */
+
+const atomicMass={};
+
+elements.forEach(
+ e=>atomicMass[e.symbol]=e.mass
+);
+
+const AVOGADRO=6.02214076e23;
+
+
+/* =========================
+   اختيار عنصر للكتلة المولية
+========================= */
+
+function insertSelectedElement(){
+
+ const select=
+  document.getElementById(
+   "massElementSelect"
+  );
+
+ const z=Number(select.value);
+
+ if(!z)return;
+
+ const e=getElement(z);
+
+ if(!e)return;
+
+ const formula=
+  document.getElementById(
+   "formula"
+  );
+
+ /*
+   نضيف رمز العنصر إلى الصيغة
+   بدل مسح ما كتبه المستخدم.
+ */
+ formula.value+=e.symbol;
+
+ const infoBox=
+  document.getElementById(
+   "massSelectedInfo"
+  );
+
+ infoBox.classList.add("show");
+
+ infoBox.innerHTML=`
+
+  <strong>
+   ${e.symbol} — ${e.name}
+  </strong>
+
+  · الكتلة الذرية:
+  ${e.mass} g/mol
+
+  · العدد الذري:
+  ${e.z}
+
+ `;
+
+ select.value="";
+
+ formula.focus();
+
+}
+
+
+function setFormula(value){
+
+ document.getElementById(
+  "formula"
+ ).value=value;
+
+ calcMass();
+
+}
+
+
+function setReaction(value){
+
+ document.getElementById(
+  "reaction"
+ ).value=value;
+
+ balance();
+
+}
+
+
+/* =========================
+   اختيار عنصر للـ Moles
+========================= */
+
+function useElementMassForMoles(z){
+
+ z=Number(z);
+
+ if(!z)return;
+
+ const e=getElement(z);
+
+ if(!e)return;
+
+ document.getElementById(
+  "molar"
+ ).value=e.mass;
+
+
+ const box=
+  document.getElementById(
+   "molesElementInfo"
+  );
+
+ box.classList.add("show");
+
+ box.innerHTML=`
+
+  <strong>
+   ${e.symbol} — ${e.name}
+  </strong>
+
+  · الكتلة المولية:
+  ${e.mass} g/mol
+
+  · العدد الذري:
+  ${e.z}
+
+ `;
+
+}
+
+
+/* =========================
+   تحليل الصيغة
+========================= */
+
+function parseFormula(f){
+
+ if(!f)
+  throw Error(
+   "اكتب الصيغة الكيميائية أولًا."
+  );
+
+
+ const tokens=
+  f.match(
+   /[A-Z][a-z]?|\d+|[()]/
+  );
+
+
+ if(
+  !tokens||
+  tokens.join("")!==f
+ )
+  throw Error(
+   "الصيغة غير صحيحة. استخدم رموز العناصر والأرقام والأقواس فقط."
+  );
+
+
+ let i=0;
+
+
+ function seq(){
+
+  let out={};
+
+  while(
+   i<tokens.length&&
+   tokens[i]!==")"
+  ){
+
+   let part={};
+
+   if(tokens[i]==="("){
+
+    i++;
+
+    part=seq();
+
+    if(tokens[i]!==")")
+     throw Error(
+      "يوجد قوس غير مغلق."
+     );
+
+    i++;
+
+   }else{
+
+    const el=tokens[i++];
+
+    if(
+     !Object.prototype.hasOwnProperty.call(
+      atomicMass,
+      el
+     )
+    )
+     throw Error(
+      "رمز العنصر غير موجود: "+el
+     );
+
+    part[el]=1;
+
+   }
+
+
+   let n=1;
+
+   if(
+    /^\d+$/.test(
+     tokens[i]||""
+    )
+   ){
+
+    n=
+     Number(
+      tokens[i++]
+     );
+
+    if(n<1)
+     throw Error(
+      "الأرقام في الصيغة يجب أن تكون موجبة."
+     );
+
+   }
+
+
+   for(
+    const el in part
+   )
+    out[el]=
+     (out[el]||0)+
+     part[el]*n;
+
+  }
+
+  return out;
+
+ }
+
+
+ const result=seq();
+
+
+ if(
+  i!==tokens.length||
+  Object.keys(result).length===0
+ )
+  throw Error(
+   "الصيغة غير مكتملة."
+  );
+
+
+ return result;
+
+}
+
+
+/* =========================
+   حساب الكتلة
+========================= */
+
+function calcMass(){
+
+ const out=
+  document.getElementById(
+   "massResult"
+  );
+
+ try{
+
+  const f=
+   document.getElementById(
+    "formula"
+   ).value
+   .trim();
+
+  const atoms=parseFormula(f);
+
+  let sum=0;
+  let rows="";
+
+
+  for(
+   const el of Object.keys(atoms)
+  ){
+
+   const contribution=
+    atoms[el]*
+    atomicMass[el];
+
+   sum+=contribution;
+
+   rows+=`
+
+    <tr>
+
+     <td>${el}</td>
+
+     <td>${atoms[el]}</td>
+
+     <td>${atomicMass[el]}</td>
+
+     <td>
+      ${contribution.toFixed(4)}
+     </td>
+
+    </tr>
+
+   `;
+
+  }
+
+
+  out.innerHTML=`
+
+   <div class="result-big">
+    ${sum.toFixed(4)} g/mol
+   </div>
+
+   <p class="muted">
+    الكتلة المولية للصيغة ${f}
+   </p>
+
+   <table>
+
+    <thead>
+
+     <tr>
+      <th>العنصر</th>
+      <th>عدد الذرات</th>
+      <th>الكتلة الذرية</th>
+      <th>المساهمة</th>
+     </tr>
+
+    </thead>
+
+    <tbody>
+
+     ${rows}
+
+     <tr class="total">
+
+      <td colspan="3">
+       المجموع
+      </td>
+
+      <td>
+       ${sum.toFixed(4)}
+      </td>
+
+     </tr>
+
+    </tbody>
+
+   </table>
+
+  `;
+
+ }catch(e){
+
+  out.textContent=e.message;
+
+ }
+
+}
+
+
+/* =========================
+   حساب المولات
+========================= */
+
+function calcMoles(){
+
+ const m=
+  Number(
+   document.getElementById(
+    "mass"
+   ).value
+  );
+
+ const M=
+  Number(
+   document.getElementById(
+    "molar"
+   ).value
+  );
+
+ const out=
+  document.getElementById(
+   "molesResult"
+  );
+
+
+ if(
+  document.getElementById("mass").value===""||
+  document.getElementById("molar").value===""||
+  m<0||
+  !Number.isFinite(m)||
+  M<=0||
+  !Number.isFinite(M)
+ ){
+
+  out.textContent=
+   "تأكد من إدخال كتلة غير سالبة وكتلة مولية أكبر من صفر.";
+
+  return;
+
+ }
+
+
+ const n=m/M;
+
+
+ out.innerHTML=`
+
+  <div class="result-big">
+   ${n.toFixed(6)} mol
+  </div>
+
+  <p>
+   القانون:
+   n = m ÷ M
+  </p>
+
+  <p>
+   ${m} ÷ ${M}
+   =
+   <b>${n.toFixed(6)} mol</b>
+  </p>
+
+ `;
+
+}
+
+
+/* =========================
+   عدد الجسيمات
+========================= */
+
+function calcParticles(){
+
+ const value=
+  document.getElementById(
+   "moles"
+  ).value;
+
+ const n=Number(value);
+
+ const out=
+  document.getElementById(
+   "particlesResult"
+  );
+
+
+ if(
+  value===""||
+  n<0||
+  !Number.isFinite(n)
+ ){
+
+  out.textContent=
+   "أدخل عدد مولات صحيحًا غير سالب.";
+
+  return;
+
+ }
+
+
+ const count=
+  n*AVOGADRO;
+
+
+ out.innerHTML=`
+
+  <div class="result-big">
+   ${count.toExponential(6)}
+  </div>
+
+  <p>جسيم</p>
+
+  <p>
+   القانون:
+   N = n × NA
+  </p>
+
+  <p>
+   ${n} × 6.02214076 × 10²³
+  </p>
+
+ `;
+
+}
+
+
+/* =========================
+   التركيز
+========================= */
+
+function calcConcentration(){
+
+ const nValue=
+  document.getElementById(
+   "concMoles"
+  ).value;
+
+ const vValue=
+  document.getElementById(
+   "concVolume"
+  ).value;
+
+ const n=Number(nValue);
+
+ const v=Number(vValue);
+
+ const out=
+  document.getElementById(
+   "concentrationResult"
+  );
+
+
+ if(
+  nValue===""||
+  vValue===""||
+  n<0||
+  v<=0||
+  !Number.isFinite(n)||
+  !Number.isFinite(v)
+ ){
+
+  out.textContent=
+   "أدخل عدد مولات غير سالب وحجمًا أكبر من صفر.";
+
+  return;
+
+ }
+
+
+ const liters=v/1000;
+
+ const M=n/liters;
+
+
+ out.innerHTML=`
+
+  <div class="result-big">
+   ${M.toFixed(6)} mol/L
+  </div>
+
+  <p>
+   حجم المحلول باللتر =
+   ${v} ÷ 1000 =
+   ${liters} L
+  </p>
+
+  <p>
+   التركيز =
+   عدد المولات ÷ الحجم باللتر
+  </p>
+
+  <p>
+   ${n} ÷ ${liters}
+   =
+   <b>${M.toFixed(6)} mol/L</b>
+  </p>
+
+ `;
+
+}
+
+
+/* =========================================================
+   موازنة المعادلات
+========================================================= */
+
+function balance(){
+
+ const out=
+  document.getElementById(
+   "balanceResult"
+  );
+
+ try{
+
+  const input=
+   document.getElementById(
+    "reaction"
+   ).value
+   .trim();
+
+
+  if(!input)
+   throw Error(
+    "اكتب المعادلة أولًا."
+   );
+
+
+  const sides=
+   input
+    .replace(/→|=/g,"->")
+    .split("->");
+
+
+  if(sides.length!==2)
+   throw Error(
+    "اكتب المعادلة بالشكل: متفاعلات -> نواتج"
+   );
+
+
+  const L=
+   sides[0]
+    .split("+")
+    .map(x=>x.trim());
+
+  const R=
+   sides[1]
+    .split("+")
+    .map(x=>x.trim());
+
+
+  if(
+   L.some(x=>!x)||
+   R.some(x=>!x)
+  )
+   throw Error(
+    "تأكد من وجود مواد على جانبي السهم."
+   );
+
+
+  const fs=
+   [...L,...R]
+    .map(
+     x=>x.replace(/^\d+/,"")
+    );
+
+
+  if(fs.length>5)
+   throw Error(
+    "الموازنة في هذه النسخة تدعم حتى خمسة مركبات."
+   );
+
+
+  const atoms=
+   fs.map(parseFormula);
+
+
+  const els=[
+   ...new Set(
+    atoms.flatMap(
+     x=>Object.keys(x)
+    )
+   )
+  ];
+
+
+  const n=fs.length;
+
+  const coef=
+   Array(n).fill(1);
+
+  let answer=null;
+
+  let tries=0;
+
+
+  function gcd(a,b){
+
+   return b
+    ?gcd(b,a%b)
+    :a;
+
+  }
+
+
+  function valid(){
+
+   const sums=[
+    {},
+    {}
+   ];
+
+
+   for(
+    let i=0;
+    i<n;
+    i++
+   ){
+
+    const side=
+     i<L.length
+      ?0
+      :1;
+
+
+    for(
+     const el in atoms[i]
+    ){
+
+     sums[side][el]=
+      (sums[side][el]||0)+
+      atoms[i][el]*
+      coef[i];
+
+    }
+
+   }
+
+
+   return els.every(
+    el=>
+     (sums[0][el]||0)===
+     (sums[1][el]||0)
+   );
+
+  }
+
+
+  function walk(i,total){
+
+   if(
+    tries>500000||
+    answer&&
+    total>=answer.total
+   )
+    return;
+
+
+   if(i===n){
+
+    tries++;
+
+
+    if(valid()){
+
+     const g=
+      coef.reduce(
+       (a,b)=>gcd(a,b)
+      );
+
+
+     const c=
+      coef.map(
+       x=>x/g
+      );
+
+
+     const s=
+      c.reduce(
+       (a,b)=>a+b
+      );
+
+
+     if(
+      !answer||
+      s<answer.total
+     )
+      answer={
+       c,
+       total:s
+      };
+
+    }
+
+    return;
+
+   }
+
+
+   for(
+    let k=1;
+    k<=12;
+    k++
+   ){
+
+    coef[i]=k;
+
+    walk(
+     i+1,
+     total+k
+    );
+
+   }
+
+  }
+
+
+  walk(0,0);
+
+
+  if(!answer)
+   throw Error(
+    "لم نعثر على موازنة ضمن حدود البحث. جرّب معادلة أبسط وتأكد من الصيغ."
+   );
+
+
+  const left=
+   L.map(
+    (f,i)=>
+     (
+      answer.c[i]===1
+       ?""
+       :answer.c[i]
+     )+
+     f
+   );
+
+
+  const right=
+   R.map(
+    (f,i)=>{
+
+     const c=
+      answer.c[
+       L.length+i
+      ];
+
+     return(
+      c===1
+       ?""
+       :c
+     )+f;
+
+    }
+   );
+
+
+  out.innerHTML=`
+
+   <div class="result-big">
+    ${left.join(" + ")}
+    →
+    ${right.join(" + ")}
+   </div>
+
+   <p>
+    تم إيجاد معاملات تحقق تساوي
+    عدد ذرات كل عنصر في الطرفين.
+   </p>
+
+  `;
+
+ }catch(e){
+
+  out.textContent=e.message;
+
+ }
+
+}
+
+
+/* =========================================================
+   التهيئة الأولية
+========================================================= */
+
+fillAllElementSelectors();
+
+renderTable();
+
+document.getElementById(
+ "labElementSelect"
+).value="6";
+
+renderAtomLab(true);
+
+</script>
+
+</body>
+</html>
